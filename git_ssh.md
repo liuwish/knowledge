@@ -1,0 +1,5 @@
+#git ssh 工作机制
+
+git ssh使用非对称加密协议（一种安全的网络协议保证）；公钥加密，私钥解密；
+git ssh 加解密时序图
+![RUNOOB 图标](./git_ssh.png)
