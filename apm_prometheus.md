@@ -1,4 +1,6 @@
 # skywalking
+- https://blog.csdn.net/scmagic/article/details/123429815
+
 具备trace追踪能力
 + 数据收集以拉取为主
 # prometheus
