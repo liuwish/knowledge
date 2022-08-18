@@ -42,3 +42,15 @@ ffmpeg -i output.mp4 -vf delogo=x=72:y=32:w=168:h=86 output.mp4
 
 #### 编码格式
 H.264的特点就是相较于其他编码格式来说，它具有低码率、容错率高、网络适应性强以及在同等条件下画面的质量比其他编码高。并且在同样的画面质量、码率的情况下，使用它编码的视频占用的内存小。
+
+#### 加解密
+
+- 加密
+```
+ffmpeg -y -i 9af1ce88cb3afae94600496d56b0898b.mp4 -vcodec copy -acodec copy -encryption_key 38453532423944464234453338424435 -encryption_kid 34373237656539333935663332346364 -encryption_scheme cenc-aes-ctr -f mp4 -movflags faststart enc_9af1ce88cb3afae94600496d56b0898b.mp4
+```
+
+解密
+```
+ffmpeg -y -decryption_key 38453532423944464234453338424435 -i enc_9af1ce88cb3afae94600496d56b0898b.mp4 -vcodec copy -acodec copy -f mp4 -movflags faststart new_9af1ce88cb3afae94600496d56b0898b.mp4
+```
