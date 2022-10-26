@@ -14,3 +14,6 @@ yum install iftop
 ```
 yun install hdparm
 ```
+
+## 沙箱
+https://juejin.cn/post/6927151461625233416

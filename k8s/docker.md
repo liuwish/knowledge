@@ -10,5 +10,6 @@ root@runoob:~# docker images   runoob/ubuntu:v3
 REPOSITORY          TAG                 IMAGE ID            CREATED             SIZE
 runoob/ubuntu       v3                  4e3b13c8a266        3 months ago        136.3 MB
 ```
+# docker k8s 的关系
 # k8s
 https://www.cnblogs.com/caodan01/p/15133112.html

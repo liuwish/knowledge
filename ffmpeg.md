@@ -54,3 +54,7 @@ ffmpeg -y -i 9af1ce88cb3afae94600496d56b0898b.mp4 -vcodec copy -acodec copy -enc
 ```
 ffmpeg -y -decryption_key 38453532423944464234453338424435 -i enc_9af1ce88cb3afae94600496d56b0898b.mp4 -vcodec copy -acodec copy -f mp4 -movflags faststart new_9af1ce88cb3afae94600496d56b0898b.mp4
 ```
+
+### 720格式转码
+
+ffmpeg -threads 8 -i Complete name : /Users/liuweishi/Desktop/ffpeg/prod_ori_trans_28b4ba9a10f1ec50c34b03f791d8e09f.mp4 -r 24 -b:v 740k -b:a 60k -maxrate 1200k -bufsize 1200k -bf 2 -g 24 -c:v libx264 -vsync cfr -strict -2 -vf scale=-2:720 -max_muxing_queue_size 99999 -ar 32000 -ac 2 -copytb 1 -f mp4 -movflags faststart -preset veryfast 720_28b4ba9a10f1ec50c34b03f791d8e09f.mp4.mp4

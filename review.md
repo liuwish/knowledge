@@ -1,5 +1,12 @@
 ### Java开发工程师面试参考题库	
 考察维度	参考问题（☆：低等难度；☆☆：中等难度；☆☆☆：高等难度）
+- Java基础，如重载重写、static和final等（难度系数：☆）
+- 集合（HashMap、ConcurrentHashMap）的使用和原理（难度系数：☆☆）
+- 线程的创建、线程池的使用、volatile的使用和原理（难度系数：☆☆）
+- JVM及垃圾回收算法（难度系数：☆☆）
+- 设计模式，如线程安全的单例模式（难度系数：☆☆）
+- web开发中cookie和session的区别和联系（难度系数：☆☆）
+- 多线程（ThreadLocal、CyclicBarrier、Atom包、CountDownLatch、AQS、CAS原理等等）  （难度系数：☆☆☆）
 #### 数据结构和算法	
     实现快排算法（难度系数：☆）
 	给定一个数组,求一个子数组,子数组是原数组的一个连续子片段.求子数组的和的最大值.（难度系数：☆☆）
@@ -34,14 +41,7 @@
 	HTTP协议与rest协议（难度系数：☆☆）
 	HTTPS协议（难度系数：☆☆☆）
 	如何对应DDOS攻击（难度系数：☆☆☆）
-#### Java语言	
-    Java基础，如重载重写、static和final等（难度系数：☆）
-	集合（HashMap、ConcurrentHashMap）的使用和原理（难度系数：☆☆）
-	线程的创建、线程池的使用、volatile的使用和原理（难度系数：☆☆）
-	JVM及垃圾回收算法（难度系数：☆☆）
-	设计模式，如线程安全的单例模式（难度系数：☆☆）
-	web开发中cookie和session的区别和联系（难度系数：☆☆）
-	多线程（ThreadLocal、CyclicBarrier、Atom包、CountDownLatch、AQS、CAS原理等等）  （难度系数：☆☆☆）
+
 #### golang 语言
 
 #### 项目经验:

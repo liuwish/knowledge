@@ -47,6 +47,8 @@ defer函数调用的顺序是后进先出。
 + 2、go channel 的底层实现原理 （数据结构）
 + 3、nil、关闭的 channel、有数据的 channel，再进行读、写、关闭会怎么样？（各类变种题型）
 + 4、向 channel 发送数据和从 channel 读数据的流程是什么样的？
++ channel源码分析
+https://zhuanlan.zhihu.com/p/299592156
 #### map相关
 + 1、map 使用注意的点，并发安全？
 + 2、map 循环是有序的还是无序的？
@@ -181,5 +183,6 @@ m结构体： Machine内核级线程, 每个工作线程都有唯一一个m结�
 - 当M执行某一个G时候如果发生了syscall或则其余阻塞操作，M会阻塞，如果当前有一些G在执行，runtime会把这个线程M从P中摘除(detach)，然后再创建一个新的操作系统的线程(如果有空闲的线程可用就复用空闲线程)来服务于这个P
 - 当M系统调用结束时候，这个G会尝试获取一个空闲的P执行，并放入到这个P的本地队列。如果获取不到P，那么这个线程M变成休眠状态， 加入到空闲线程中，然后这个G会被放入全局队列中
 
-
+## pprof
+https://sszt-gateway.speiyou.com/beibo/transcode/debug/pprof/goroutine?debug=1
 
