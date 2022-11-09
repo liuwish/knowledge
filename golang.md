@@ -186,3 +186,6 @@ m结构体： Machine内核级线程, 每个工作线程都有唯一一个m结�
 ## pprof
 https://sszt-gateway.speiyou.com/beibo/transcode/debug/pprof/goroutine?debug=1
 
+### gin 生成swagger文档
+ swag init -g ./coursewaredata.go --parseVendor
+
