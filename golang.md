@@ -3,11 +3,16 @@
 * make和new都是golang用来分配内存的內建函数，且在堆上分配内存，make 即分配内存，也初始化内存。new只是将内存清零，并没有初始化内存。
 * make返回的还是引用类型本身；而new返回的是指向类型的指针
 * make只能用来分配及初始化类型为slice，map，channel的数据；new可以分配任意类型的数据
-* make 和 new 虽然都用来初始化新变量，但适用的情况却不一样，make 主要用来初始化三种内置的引用类型的数据结构，而 new 则更通用一些，主要为一些值类型的变量申请内存
+* make 和 new 虽然都用来初始化新变量，但适用的情况却不一样，make 主要用来初始化三种内置的引用类型（切片，map，channel）的数据结构，而 new 则更通用一些，主要为一些值类型的变量申请内存
 
 #### 2、数组和切片的区别 （基本必问）
 #### 3、for range 的时候它的地址会发生变化么？
+```
+答：在 for a,b := range c 遍历中， a 和 b 在内存中只会存在一份，即之后每次循环时遍历到的数据都是以值覆盖的方式赋给 a 和 b，a，b 的内存地址始终不变。由于有这个特性，for 循环里面如果开协程，不要直接把 a 或者 b 的地址传给协程。解决办法：在每次循环时，创建一个临时变量。
+```
+
 #### 4、go defer，多个 defer 的顺序，defer 在什么时机会修改返回值？
+压栈
 #### 5、 uint 类型溢出
 #### 6、介绍 rune 类型
 ```
@@ -159,14 +164,18 @@ goroutine启动时默认栈大小只有2k，可自动调整容量
 
 ###### GM模型
 ![Go1.1 GM模型](./image/golang/thread_gorutine.png)
+###### GMP组成
+![Go1.1 GMP组成](./image/golang/gmp_zucheng.png)
+
+
+
+**GPM的几个字母概念**
 
 在12年的go1.1版本之前用的都是GM模型, G为Goroutine协程，M为Machine内核级线程, M想要执行、放回G都必须访问全局G队列，并且M有多个，即多线程访问同一资源需要加锁进行保证互斥/同步，所以全局G队列是有互斥锁进行保护的。
 
-- 1.创建、销毁、调度G都需要每个M获取锁，这就形成了激烈的锁竞争
-- 2.很差的局部性。比如当G中包含创建新协程的时候，M0创建了G1，因为将
 
-**GPM的几个字母概念**
-- G1放入全局队列，，需要把G1交给M’执行，也造成了很差的局部性，因为G’和G是相关的，最好放在M上执行，而不是其他M
+- 1.创建、销毁、调度G都需要每个M获取锁，这就形成了激烈的锁竞争
+- 2.很差的局部性。比如当G中包含创建新协程的时候，M0创建了G1，因为将G1放入全局队列，需要把G1交给M’执行，也造成了很差的局部性，因为G’和G是相关的，最好放在M上执行，而不是其他M
 
 - g的结构体： 它保存了goroutine的所有信息, 如保存调度信息
 m结构体： Machine内核级线程, 每个工作线程都有唯一一个m结构体的实例对象与之对应，线程通过 ThreadLocal 存储各自的m对象；m结构体对象主要记录着工作线程的诸如栈的起止位置、当前正在执行的goroutine以及是否空闲等等状态信息之外，还通过指针维持着与p结构体的实例对象之间的绑定关系。
@@ -189,3 +198,63 @@ https://sszt-gateway.speiyou.com/beibo/transcode/debug/pprof/goroutine?debug=1
 ### gin 生成swagger文档
  swag init -g ./coursewaredata.go --parseVendor
 
+### golang context.Context 上下文使用
+当使用 `context.Context` 时，您可以按照以下步骤进行操作：
+
+1. 创建一个根上下文（Root Context）：在您的应用程序的入口点，使用 `context.Background()` 或 `context.TODO()` 函数创建一个根上下文。这个根上下文会被传递给其他的协程。
+
+2. 创建一个派生上下文（Derived Context）：在需要传递上下文的地方，使用 `context.WithValue(parentContext, key, value)` 函数创建一个派生上下文，并指定键值对数据。这个派生上下文会继承父上下文的属性，并添加新的键值对数据。
+
+3. 传递上下文给协程：将创建的上下文传递给需要访问上下文的协程或函数。可以通过函数参数、结构体字段或其他方式来传递上下文。
+
+4. 使用上下文：在协程或函数中，可以使用 `ctx.Value(key)` 方法来获取与键关联的值。还可以使用 `ctx.Done()` 通道来监听取消信号。此外，还可以使用 `ctx.Err()` 方法来检查上下文是否已经取消。
+
+5. 取消上下文：如果需要取消协程或函数的执行，可以调用 `cancel()` 函数。这个函数是通过 `context.WithCancel(parentContext)` 创建派生上下文时返回的。取消一个上下文会向所有派生的上下文发送取消信号，从而触发相应的取消操作。
+
+使用 `context.Context` 可以有效地管理协程之间的请求范围数据和取消信号，提高代码的可读性和可维护性。在实际应用中，您可以根据需要灵活地使用上下文来满足您的需求。
+
+```
+package main
+
+import (
+    "context"
+    "fmt"
+)
+
+func main() {
+    // 创建一个根上下文
+    ctx := context.Background()
+
+    // 创建一个派生上下文，并设置键值对数据
+    ctx = context.WithValue(ctx, "userID", 123)
+
+    // 启动一个协程，并传递上下文
+    go func(ctx context.Context) {
+        // 从上下文中获取键值对数据
+        userID, ok := ctx.Value("userID").(int)
+        if !ok {
+            fmt.Println("userID not found in context")
+            return
+        }
+        fmt.Printf("userID: %d\n", userID)
+
+        // 监听取消信号
+        select {
+        case <-ctx.Done():
+            fmt.Println("context canceled")
+            return
+        default:
+            // 执行一些操作
+            fmt.Println("doing some work")
+        }
+    }(ctx)
+
+    // 等待一段时间
+    select {
+    case <-time.After(time.Second * 3):
+        fmt.Println("done")
+    }
+}
+
+```
+在这个示例中，我们首先创建一个根上下文，并使用 context.WithValue 函数创建一个派生上下文，并设置了一个键值对数据。然后，我们启动了一个协程，并将上下文传递给它。在协程中，我们使用 ctx.Value 方法从上下文中获取键值对数据，并打印出来。然后，我们使用 select 语句监听取消信号，并执行一些操作。在主函数中，我们等待一段时间后结束程序。

@@ -54,7 +54,26 @@ ffmpeg -y -i 9af1ce88cb3afae94600496d56b0898b.mp4 -vcodec copy -acodec copy -enc
 ```
 ffmpeg -y -decryption_key 38453532423944464234453338424435 -i enc_9af1ce88cb3afae94600496d56b0898b.mp4 -vcodec copy -acodec copy -f mp4 -movflags faststart new_9af1ce88cb3afae94600496d56b0898b.mp4
 ```
+### 原视频转码指令
+ffmpeg -threads 4 -i tests.mp4 -r 24  -b:v 1800k -ar 32000 -max_muxing_queue_size 99999 -f mp4 -movflags faststart -preset veryfast  -y 7a4676ee611d7ae8283fe5b27fabdb44.mp4
+
+### 原始GPU指令（原码率）
+/root/bin/ffmpeg -hwaccel cuvid -hwaccel_output_format cuda -c:v h264_cuvid -noautorotate -threads 8 -i /data/zt_transcode/download/test2.mp4 -c:v h264_nvenc -r 24 -b:v 86288 -ar 32000 -max_muxing_queue_size 99999 -f mp4 -movflags faststart -y ori_trans_7a4676ee611d7ae8283fe5b27fabdb44.mp4
+```
+保持原视频时间不变
+/root/bin/ffmpeg -hwaccel cuvid -hwaccel_output_format cuda  -noautorotate -threads 8 -i /data/zt_transcode/download/test2.mp4 -r 24  -copyts -c:v copy -c:a copy output-copy.mp4
+```
 
 ### 720格式转码
 
-ffmpeg -threads 8 -i Complete name : /Users/liuweishi/Desktop/ffpeg/prod_ori_trans_28b4ba9a10f1ec50c34b03f791d8e09f.mp4 -r 24 -b:v 740k -b:a 60k -maxrate 1200k -bufsize 1200k -bf 2 -g 24 -c:v libx264 -vsync cfr -strict -2 -vf scale=-2:720 -max_muxing_queue_size 99999 -ar 32000 -ac 2 -copytb 1 -f mp4 -movflags faststart -preset veryfast 720_28b4ba9a10f1ec50c34b03f791d8e09f.mp4.mp4
+ffmpeg -threads 8 -i d251cb626bb3a487960fb66db22046d5.mp4 -r 24 -b:v 740k -b:a 60k -maxrate 1200k -bufsize 1200k -bf 2 -g 24 -c:v libx264 -vsync cfr -strict -2 -vf scale=-2:720 -max_muxing_queue_size 99999 -ar 32000 -ac 2 -copytb 1 -f mp4 -movflags faststart -preset veryfast 720_d251cb626bb3a487960fb66db22046d5.mp4
+
+
+ffmpeg -threads 8 -i 7a4676ee611d7ae8283fe5b27fabdb44.mp4 -r 24 -af asetpts=PTS  -b:v 740k -b:a 60k -maxrate 1200k -bufsize 1200k -bf 2 -g 24 -c:v libx264 -vsync cfr -strict -2 -vf scale=-2:720 -max_muxing_queue_size 99999 -ar 32000 -ac 2 -copytb 1 -f mp4 -movflags faststart -preset veryfast 720_7a4676ee611d7ae8283fe5b27fabdb44.mp4
+
+```
+保持视频流时长不变的720格式GPU转码指令
+/root/bin/ffmpeg -hwaccel cuvid -hwaccel_output_format cuda  -noautorotate -threads 8 -i test_ori_trans_195266893067e6734829d205b449a18c.mp4 -r 24  -cq 35 -b:v 800k -maxrate 1200k -bf 2 -g 24 -c:v h264_nvenc -vsync cfr -strict -2  -max_muxing_queue_size 99999 -ar 32000 -copytb 1 -filter:v setpts=PTS,scale_npp=-1:720 -f mp4 -movflags faststart -y 195266893067e6734829d205b449a18c_720.mp4
+
+```
+/root/bin/ffmpeg -hwaccel cuvid -hwaccel_output_format cuda  -noautorotate -threads 8 -i /data/zt_transcode/download/test_195266893067e6734829d205b449a18c.mp4 -r 24 -cq 35 -b:v 800k -maxrate 1200k -bf 2 -g 24 -c:v h264_nvenc -vsync cfr -strict -2 -max_muxing_queue_size 99999 -ar 32000 -copytb 1 -vf setpts=PTS,scale_npp=-1:720 -f mp4 -movflags faststart -y /data/zt_transcode/download/720_195266893067e6734829d205b449a18c.mp4

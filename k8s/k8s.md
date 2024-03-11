@@ -1,3 +1,10 @@
+### 指令
+- kubecm switch 切换 
+- kubectl get node -n  namespace 查看命名空间下的node节点
+- kubectl node-shell nodename 登入node的节点操作node
+
+
+
 ### k8s的发展
 bolg:https://blog.csdn.net/QcloudCommunity/article/details/125650918
 
