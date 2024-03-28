@@ -1,7 +1,8 @@
-// src/router/index.js
-
 import {createRouter, createWebHistory} from 'vue-router'
 import { defineAsyncComponent } from 'vue'
+// 路由懒加载
+// const getComponent = (name, component) => () =>
+//     import (`@/${name}/${component}.vue`);
 
 const router = createRouter({ 
   // history: createWebHashHistory(),  // hash 模式
@@ -10,7 +11,7 @@ const router = createRouter({
     {
       path: '/Home',
       name: 'HomePage',
-      component: defineAsyncComponent(() => import(`../components/Home.vue`)),
+      component: defineAsyncComponent(() => import(`@/views/Home.vue`)),
       meta: {
         title: '首页',
       },
@@ -18,30 +19,26 @@ const router = createRouter({
     {
       path: '/About',
       name: 'AboutPage',
-      component: defineAsyncComponent(() => import(`../components/About.vue`)),
+      component:  defineAsyncComponent(() => import(`@/views/About.vue`)),
       meta: {
-        title: '列表页',
+        title: '关于页',
       },
     },
-    // {
-    //   path: '/*',
-    //   redirect: '/',
-    // },
   ]
 })
 
 // 全局路由守卫
 router.beforeEach((to, from, next)=>{
-  // console.log(to, from)
+  console.log(to, from)
   if (to.meta.title) {
     document.title = `${to.meta.title}`;
   }
   next()
 })
 
-// router.afterEach((to, from)=>{
-//   // console.log(to, from)
-//   console.log('afterEach')
-// })
+router.afterEach((to, from)=>{
+  console.log(to, from)
+  console.log('afterEach')
+})
 
 export default router
